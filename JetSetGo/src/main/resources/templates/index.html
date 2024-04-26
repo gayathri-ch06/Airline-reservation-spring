@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JetSetGo Homepage</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 1536px;
+            height: 800px;
+            border-radius: 4px;
+            position: relative;
+            background-image: url('/images/homepage image.jpg');
+            background-size: cover;
+        }
+        .welcome-label {
+            position: absolute;
+            top: 154px;
+            left: 578px;
+            width: 420px;
+            height: 244px;
+            font-size: 64px;
+            font-weight: bold;
+            color: whitesmoke;
+            text-align: center;
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        .button {
+            position: absolute;
+            font-size: 23px;
+            font-weight: bold;
+            border-radius: 4px;
+            height: 48px;
+            cursor: pointer;
+        }
+        .sign-in-button {
+            top: 485px;
+            right: 550px;
+            width: 175px;
+            background-color: #FFF;
+            border: 2px solid #605DEC;
+            color: #605DEC;
+        }
+        .sign-up-button {
+            top: 485px;
+            left: 550px;
+            width: 175px;
+            background-color: #605DEC;
+            color: #FFF;
+        }
+        
+        .sign-up-success-label {
+            position: absolute;
+            bottom: 16px;
+            width: 100%;
+            font-size: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="welcome-label">Welcome to Cloud9 Airways!</div>
+        <button class="button sign-in-button" onclick="homePageOnSignIn()">Sign In</button>
+        <button class="button sign-up-button" onclick="homePageOnSignUp()">Sign Up</button>
+        <div class="sign-up-success-label" id="signUpSuccessLabel"></div>
+    </div>
+    
+    <script>
+        function homePageOnSignIn() {
+            window.location.href = '/templates/SignIn.html'; // Redirect to signin.html
+        }
+        
+         function homePageOnSignUp() {
+            window.location.href = '/templates/Signup.html'; // Redirect to signup.html
+        }
+    </script>
+</body>
+</html>

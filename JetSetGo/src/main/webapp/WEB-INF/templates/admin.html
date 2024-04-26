@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Administration</title>
+</head>
+<body>
+    <h1>Flight Administration</h1>
+    
+    <label for="flightID">Flight Number:</label>
+    <input type="text" id="flightID"><br><br>
+    
+    <label for="source">Source:</label>
+    <input type="text" id="source"><br><br>
+    
+    <label for="destination">Destination:</label>
+    <input type="text" id="destination"><br><br>
+    
+    <label for="departureDate">Departure Date:</label>
+    <input type="text" id="departureDate"><br><br>
+    
+    <label for="arrivalDate">Arrival Date:</label>
+    <input type="text" id="arrivalDate"><br><br>
+    
+    <label for="departureTime">Departure Time:</label>
+    <input type="text" id="departureTime"><br><br>
+    
+    <label for="arrivalTime">Arrival Time:</label>
+    <input type="text" id="arrivalTime"><br><br>
+    
+    <button onclick="addFlight()">Add Flight</button>
+    <button onclick="updateFlight()">Update Flight</button>
+    <button onclick="removeFlight()">Remove Flight</button>
+    
+    <script>
+		
+		
+		function addFlight() {
+		    var flight_number = document.getElementById('flightID').value;
+		    var source = document.getElementById('source').value;
+		    var destination = document.getElementById('destination').value;
+		    var departure_date = document.getElementById('departureDate').value;
+		    var arrival_date = document.getElementById('arrivalDate').value;
+		    var departure_time = document.getElementById('departureTime').value;
+		    var arrival_time = document.getElementById('arrivalTime').value;
+		
+		    // Perform validation if needed
+		
+		    // Send data to server to add flight
+		    // Example using fetch API
+		    fetch('/addFlight', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        },
+		        body: JSON.stringify({
+		            flight_number: flight_number,
+		            source: source,
+		            destination: destination,
+		            departure_date: departure_date,
+		            arrival_date: arrival_date,
+		            departure_time: departure_time,
+		            arrival_time: arrival_time
+		        })
+		    })
+		    .then(response => {
+		        if (response.ok) {
+		            console.log('Flight added successfully');
+		            // Handle success
+		        } else {
+		            console.error('Failed to add flight');
+		            // Handle failure
+		        }
+		    })
+		    .catch(error => {
+		        console.error('Error:', error);
+		    });
+		}
+		
+		function updateFlight() {
+		    // Similar to addFlight, but send request to update flight
+		}
+		
+		function removeFlight() {
+		    // Similar to addFlight, but send request to remove flight
+		}
+
+	</script>
+</body>
+</html>

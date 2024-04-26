@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+       body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200vh;
+            background-image: url('/images/BG.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .backgound {
+			background-image: url('/images/BG.jpg');
+
+		}
+        .container {
+            width: 605px;
+            height: 75%;
+            border-radius: 4px;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: rgba(240, 240, 240, 0.8); /* Adjust background color opacity */
+        }
+        .heading {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #605DEC;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #4b47b6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="heading">Sign Up for Cloud9 Airways!</h1>
+        <div class="input-group">
+            <input type="text" id="firstname" class="input-field" placeholder="First Name">
+        </div>
+        <div class="input-group">
+            <input type="text" id="lastname" class="input-field" placeholder="Last Name">
+        </div>
+        <div class="input-group">
+            <input type="text" id="email" class="input-field" placeholder="Email">
+            <span id="emailValidator" class="validator-label"></span>
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" class="input-field" placeholder="Password">
+            <span id="passwordValidator" class="validator-label"></span>
+        </div>
+        <div class="input-group">
+            <input type="number" id="mobilenumber" class="input-field" placeholder="Mobile Number">
+        </div>
+        <div class="input-group">
+            <input type="text" id="addressLine" class="input-field" placeholder="Street Address">
+        </div>
+         <div class="input-group">
+            <input type="text" id="city" class="input-field" placeholder="City">
+        </div>
+         <div class="input-group">
+            <input type="text" id="state" class="input-field" placeholder="State">
+        </div>
+         <div class="input-group">
+            <input type="number" id="zipcode" class="input-field" placeholder="Zipcode">
+        </div>
+        <h2 class="heading">Payment Details:</h2>
+         <div class="input-group">
+        	<input type="text" id="card_number" class="input-field" placeholder="Card Number">
+	    </div>
+	    <div class="input-group">
+	        <input type="text" id="expiry_date" class="input-field" placeholder="Expiry Date (MM/YYYY)">
+	    </div>
+	    <div class="input-group">
+	        <input type="text" id="name_on_card" class="input-field" placeholder="Name on Card">
+	    </div>
+	    <div class="input-group">
+	        <input type="password" id="security_code" class="input-field" placeholder="Security Code">
+	    </div>
+	    <div class="input-group">
+            <input type="text" id="billingStreet" class="input-field" placeholder="Street Address">
+        </div>
+         <div class="input-group">
+            <input type="text" id="billingCity" class="input-field" placeholder="City">
+        </div>
+         <div class="input-group">
+            <input type="text" id="billingState" class="input-field" placeholder="State">
+        </div>
+         <div class="input-group">
+            <input type="number" id="billingZipCode" class="input-field" placeholder="Zipcode">
+        </div>
+        <button type="button" class="submit-btn" onclick="signUp()">Create account</button>
+    </div>
+
+    <script>
+	    function signUp() {
+	        // Get values from input fields
+	        var firstName = document.getElementById('firstname').value;
+	        var lastName = document.getElementById('lastname').value;
+	        var email = document.getElementById('email').value;
+	        var password = document.getElementById('password').value;
+	        var mobileNumber = document.getElementById('mobilenumber').value;
+	        var addressLine = document.getElementById('addressLine').value;
+	        var city = document.getElementById('city').value;
+	        var state = document.getElementById('state').value;
+	        var zipcode = document.getElementById('zipcode').value;
+	        
+	        var firstName = document.getElementById('firstname').value;
+		    var cardNumber = document.getElementById('card_number').value;
+		    var expiryDate = document.getElementById('expiry_date').value;
+		    var nameOnCard = document.getElementById('name_on_card').value;
+		    var securityCode = document.getElementById('security_code').value;
+		    var billingStreet = document.getElementById('billingStreet').value;
+	        var billingCity = document.getElementById('billingCity').value;
+	        var billingState = document.getElementById('billingState').value;
+	        var billingZipCode = document.getElementById('billingZipCode').value;
+	        
+	
+	        // Validate input fields (you can add more validation as needed)
+	        if (!email || !password || !firstName || !lastName || !mobileNumber || !addressLine || !city || !state || !zipcode) {
+	            alert('Please fill in all fields');
+	            return;
+	        }
+	
+	        // Example of email validation (you can use regex for more precise validation)
+	        if (!isValidEmail(email)) {
+	            alert('Please enter a valid email address');
+	            return;
+	        }
+	
+	        // Example of password validation (you can add more rules)
+	        if (password.length < 6) {
+	            alert('Password must be at least 6 characters long');
+	            return;
+	        }
+			
+		fetch('/registerUser', {
+		    method: 'POST',
+		    headers: {
+		        'Content-Type': 'application/json'
+		    },
+		    body: JSON.stringify({
+		        firstName: firstName,
+		        lastName: lastName,
+		        userEmail: email,
+		        password: password,
+		        mobileNumber: mobileNumber,
+		        addressLine: addressLine,
+		        city: city,
+		        state: state,
+		        zipcode: zipcode
+		    })
+		})
+		.then(response => {
+		    if (response.ok) {
+		        console.log('User registered successfully');
+		        // Handle success
+		    } else {
+		        console.error('Failed to register user');
+		        // Handle failure
+		    }
+		})
+		.catch(error => {
+		    console.error('Error:', error);
+		});
+		
+		
+		
+		fetch('/addPayment', {
+		    method: 'POST',
+		    headers: {
+		        'Content-Type': 'application/json'
+		    },
+		    body: JSON.stringify({
+		        cardNumber: cardNumber,
+		        userEmail: email,
+		        expiryDate: expiryDate,
+		        nameOnCard: nameOnCard,
+		        securityCode: securityCode,
+		        street: billingStreet,
+		        city: billingCity,
+		        state: billingState,
+		        zipcode: billingZipCode
+		    })
+		})
+		.then(response => {
+		    if (response.ok) {
+		        console.log('Payment added successfully');
+		        // Handle success
+		    } else {
+		        console.error('Failed to register user');
+		        // Handle failure
+		    }
+		})
+		.catch(error => {
+		    console.error('Error:', error);
+		});
+		
+		
+		window.location.href = '/templates/SignIn.html';
+	    }
+	
+	    // Function to validate email format
+	    function isValidEmail(email) {
+	        // This is a simple validation, you can use regex for more precise validation
+	        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+	    }
+	   </script>
+
+</body>
+</html>

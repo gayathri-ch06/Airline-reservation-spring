@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings</title>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/images/BG.jpg');
+            background-size: cover;
+        }
+        .backgound {
+			background-image: url('/images/BG.jpg');
+
+		}
+        .navbar {
+			background-image: url('/images/navbar-BG.jpg');
+			background-size:cover;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .profile-icon {
+            position: relative;
+        }
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: none;
+        }
+        .profile-dropdown a {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+        .profile-dropdown a:last-child {
+            margin-bottom: 0;
+        }
+        .profile-icon:hover .profile-dropdown {
+            display: block;
+        }
+        .bookingsContainer {
+             width: 80%;
+		      max-width: 600px;
+		      background-color: #fff;
+		      padding: 20px;
+		      margin: 20px auto;
+		      justify-content: center;
+		      align-items: center;
+		      border-radius: 8px;
+			  border-color: white;
+	    }
+        p {
+			color:  #fff;
+		}
+    </style>
+</head>
+<body>
+	
+	<div class="navbar">
+        <div class="navbar-logo">Cloud9 Airlines</div>
+        <div class="navbar-links">
+            <a href="/templates/FlightSearch.html">Flight Search</a>
+            <a href="/templates/MyBookings.html">My Bookings</a>
+            <div class="profile-icon">
+                <img src="/images/profile-icon.jpg" alt="Profile Icon" width="30" height="30">
+                <div class="profile-dropdown">
+                    <a href="/templates/Profile.html">Edit Profile</a>
+                    <a href="/templates/index.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="bookingsContainer">
+        <!-- Bookings will be dynamically populated here -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchBookings();
+        });
+
+        function fetchBookings() {
+            const userEmail = sessionStorage.getItem('userEmail');
+            if (!userEmail) {
+                console.error('User email not found.');
+                return;
+            }
+
+             fetch('/getBooking', {
+			    method: 'POST',
+			    headers: {
+			        'Content-Type': 'text/plain'
+			    },
+			    body:  sessionStorage.getItem('userEmail')
+			      
+			    
+			})
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch bookings.');
+                    }
+                    return response.json();
+                })
+                .then(bookings => {
+                    displayBookings(JSON.stringify(bookings));
+                })
+                .catch(error => {
+                    console.error('Error fetching bookings:', error);
+                });
+        }
+
+        function displayBookings(bookings) {
+            const bookingsContainer = document.getElementById('bookingsContainer');
+            bookingsContainer.innerHTML = ''; // Clear existing content
+
+            if (bookings.length === 0) {
+                bookingsContainer.textContent = 'No bookings found.';
+                return;
+            }
+			bookings = JSON.parse(bookings);
+            bookings.forEach(booking => {
+                const bookingElement = document.createElement('div');
+                bookingElement.classList.add('booking');
+                // Customize this based on your booking object structure
+                bookingElement.innerHTML = `
+                    <p><strong>Source:</strong> ${booking.source}</p>
+                    <p><strong>Destination:</strong> ${booking.destination}</p>
+                    <p><strong>Arrival Date:</strong> ${booking.arrivalDate}</p>
+                    <p><strong>Departure Date:</strong> ${booking.departureDate}</p>
+                    <p><strong>Arrival Time:</strong> ${booking.arrivalTime}</p>
+                    <p><strong>Departure Time:</strong> ${booking.departureTime}</p>
+                    <p><strong>Total Fare:</strong> ${booking.totalFare}</p>
+                    <p><strong>Trip Type:</strong> ${booking.tripType}</p>
+                    <p><strong>Number of Passengers:</strong> ${booking.numberOfPassengers}</p>
+                    <p><strong>Number of Carry-on Bags:</strong> ${booking.numberOfCarryon}</p>
+                    <p><strong>Number of Checked Bags:</strong> ${booking.numberOfCheckedBags}</p>
+                    <hr>
+                `;
+                bookingsContainer.appendChild(bookingElement);
+            });
+        }
+    </script>
+</body>
+</html>

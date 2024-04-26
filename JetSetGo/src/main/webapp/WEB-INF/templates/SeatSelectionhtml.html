@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>32 x 6 Grid</title>
+  <style>  
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url('/images/BG.jpg');
+      background-size: cover;
+    }
+    /* Basic styling for the grid */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr); /* 6 columns */
+      gap: 5px; /* Gap between grid items */
+      width: 30%;
+      justify-content: center;
+      margin: 20px auto;
+    }
+    .grid-item {
+      background-color: #f0f0f0; /* Background color */
+      border: 1px solid #ccc; /* Border */
+      border-radius: 10px; /* Curved border */
+      padding: 20px; /* Padding */
+      text-align: center; /* Center text */
+      font-family: Arial, sans-serif; /* Font family */
+      font-size: 14px; /* Font size */
+      cursor: pointer; /* Cursor as pointer */
+    }
+    .empty-cell {
+      background-color: transparent; /* Transparent background */
+      border: none; /* No border */
+      padding: 0; /* No padding */
+      text-align: initial; /* Text alignment as initial */
+    }
+    .selected {
+      background-color: #6F675B; /* Background color for selected seats */
+      color: white; /* Text color for selected seats */
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      background-image: linear-gradient(to bottom right, #6F675B, white);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px; /* Add space between button and other content */
+    }
+    .submit-btn:hover {
+      background-image: linear-gradient(to bottom right, white, #6F675B);
+      color: #fff;
+    }
+    .navbar {
+			background-image: url('/images/navbar-BG.jpg');
+			background-size:cover;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .profile-icon {
+            position: relative;
+        }
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: none;
+        }
+        .profile-dropdown a {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+        .profile-dropdown a:last-child {
+            margin-bottom: 0;
+        }
+        .profile-icon:hover .profile-dropdown {
+            display: block;
+        }
+  </style>
+</head>
+<body>
+	
+	<div class="navbar">
+        <div class="navbar-logo">Cloud9 Airlines</div>
+        <div class="navbar-links">
+            <a href="/templates/FlightSearch.html">Flight Search</a>
+            <a href="/templates/MyBookings.html">My Bookings</a>
+            <div class="profile-icon">
+                <img src="/images/profile-icon.jpg" alt="Profile Icon" width="30" height="30">
+                <div class="profile-dropdown">
+                    <a href="/templates/Profile.html">Edit Profile</a>
+                    <a href="/templates/index.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  <div class="grid-container">
+    <!-- Generating the grid items -->
+    <script>
+      // Function to handle seat selection
+      function selectSeat(event) {
+        const selectedSeats = document.querySelectorAll('.selected');
+        const passengerCount = sessionStorage.getItem('passengersCount');
+
+        if (selectedSeats.length < passengerCount) {
+          event.target.classList.toggle('selected'); // Toggle the 'selected' class on click
+        } else {
+          alert('You have already selected the maximum number of seats.'); // Display an alert if the maximum number of seats is reached
+        }
+      }
+
+      // Loop to create grid items
+      for (let row = 1; row <= 20; row++) {
+        for (let col = 0; col <= 6; col++) {
+          const gridItem = document.createElement('div');
+          gridItem.classList.add('grid-item');
+          if (col === 3) {
+            gridItem.textContent = ""; // Leave the cell empty
+            gridItem.classList.add('empty-cell');
+          } else {
+            const adjustedCol = col > 3 ? col - 1 : col; // Adjusting column index for the second set of columns
+            gridItem.textContent = `${row}` + String.fromCharCode(65 + adjustedCol); // Displaying the row and column number
+            gridItem.addEventListener('click', selectSeat); // Add click event listener to each grid item
+          }
+          document.querySelector('.grid-container').appendChild(gridItem);
+        }
+      }
+      function submitSeats() {
+		  const selectedSeats = document.querySelectorAll('.selected');
+		  const selectedSeatsInfo = []; // Array to store information about selected seats
+		
+		  // Loop through each selected seat
+		  selectedSeats.forEach(seat => {
+		    // Extract row and column information from the seat's text content
+		    const seatNumber = seat.textContent.trim();
+		   	
+		    // Store the row and column information in an object and add it to the selectedSeatsInfo array
+		    selectedSeatsInfo.push(seatNumber);
+		  });
+		
+		 sessionStorage.setItem('selectedSeats', selectedSeatsInfo);
+		 window.location.href = '/templates/Checkout.html';
+		}
+
+    </script>
+     <button class="submit-btn" type="submit" onclick="submitSeats()">Continue</button>
+  </div>
+</body>
+</html>

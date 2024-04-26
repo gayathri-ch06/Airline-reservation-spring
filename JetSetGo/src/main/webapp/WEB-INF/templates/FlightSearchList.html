@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Flights</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome icons -->
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/images/BG.jpg');
+            background-size: cover;
+        }
+        .backgound {
+            background-image: url('/images/BG.jpg');
+        }
+        .container {
+            width: 800px;
+            margin: 20px auto;
+            border-radius: 4px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .navbar {
+			background-image: url('/images/navbar-BG.jpg');
+			background-size:cover;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .profile-icon {
+            position: relative;
+        }
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: none;
+        }
+        .profile-dropdown a {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+        .profile-dropdown a:last-child {
+            margin-bottom: 0;
+        }
+        .profile-icon:hover .profile-dropdown {
+            display: block;
+        }
+        .flight {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-image: linear-gradient(to bottom right, ghostwhite, #44285C);
+            cursor: pointer; /* Add cursor pointer for clickable behavior */
+        }
+        
+         h1, h2 {
+            margin-bottom: 10px;
+            color: #fff;
+
+        }
+        .flight-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .flight-details span {
+            margin-bottom: 5px;
+        }
+        .flight-source,
+        .flight-destination {
+            font-weight: bold;
+        }
+        
+        .duration-line {
+            height: 2px;
+            border-top: 3px dotted #ccc;
+            flex-grow: 2;
+            margin: 0 10px;
+            position: relative;
+        }
+        .duration-value {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+            height: 30px;
+            width: 30px;
+        }
+        
+        .selected {
+    		border: 2px solid whitesmoke; /* Red border to indicate selection */
+		}
+    </style>
+</head>
+<body>
+	
+	<div class="navbar">
+        <div class="navbar-logo">Cloud9 Airlines</div>
+        <div class="navbar-links">
+            <a href="/templates/FlightSearch.html">Flight Search</a>
+            <a href="/templates/MyBookings.html">My Bookings</a>
+            <div class="profile-icon">
+                <img src="/images/profile-icon.jpg" alt="Profile Icon" width="30" height="30">
+                <div class="profile-dropdown">
+                    <a href="/templates/Profile.html">Edit Profile</a>
+                    <a href="/templates/index.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container" id="flightContainer">
+        <!-- Flight entries will be dynamically populated here -->
+    </div>
+
+	<script>
+	    // Retrieve flights and trip type from sessionStorage
+	    const flights = JSON.parse(sessionStorage.getItem('flights'));
+	    const flightsRT = JSON.parse(sessionStorage.getItem('flightsRT'))
+	    console.log(flightsRT);
+	    const tripType = sessionStorage.getItem('tripType');
+	    console.log(tripType);
+	
+	    // Check if flights exist
+	    if (flights && flights.length > 0) {
+	        // Get the flightContainer element
+	        const flightContainer = document.getElementById('flightContainer');
+	        
+	        
+	        flightContainer.innerHTML += `<h2>Departure Flight</h2>`;
+	        // Loop through the flights and generate flight entries
+	        flights.forEach((flight, index) => {
+	            // Generate HTML for each flight entry based on trip type
+	            	let flightHtml = '';
+	                // For roundtrip flights, display both departure and return flights
+	                flightHtml = `
+	                	
+	                    <div id="${flight.flightId}" class="flight" onclick="selectFlight('${flight.flightId}', 'oneway')">
+	                        <div class="flight-details">
+	                            <span class="flight-source">${flight.source}</span>
+	                            <img src="/images/departure-1.png" alt="Take-off Icon" class="icon"> <!-- Take-off icon -->
+	                            <span>${flight.departureTime}</span> <!-- Departure time -->
+	                        </div>
+	                        <div class="duration-line">
+	                            <span class="duration-value">${flight.durationInHours} hours</span>
+	                        </div>
+	                        <div class="flight-details">
+	                            <span class="flight-destination">${flight.destination}</span>
+	                            <img src="/images/landing.jpg" alt="Take-off Icon" class="icon"> <!-- Take-off icon -->
+	                            <span>${flight.arrivalTime}</span> <!-- Arrival time -->
+	                        </div>
+	                    </div>
+	                `;
+	                flightContainer.innerHTML += flightHtml;
+	         });
+	         
+	           
+	         if(tripType==="roundtrip") {
+				  	console.log("Getting roundtrip flights");
+				  	flightContainer.innerHTML += `<h2>Return Flight</h2>`;
+					flightsRT.forEach((flight, index) => {
+		            // Generate HTML for each flight entry based on trip type
+		            let flightRTHtml = '';
+		                // For roundtrip flights, display both departure and return flights
+		                flightRTHtml = `
+		                	
+		                    <div id="${flight.flightId}" class="flight" onclick="selectFlight('${flight.flightId}', 'return')">
+		                        <div class="flight-details">
+		                            <span class="flight-source">${flight.source}</span>
+		                            <img src="/images/departure-1.png" alt="Take-off Icon" class="icon"> <!-- Take-off icon -->
+		                            <span>${flight.departureTime}</span> <!-- Departure time -->
+		                        </div>
+		                        <div class="duration-line">
+		                            <span class="duration-value">${flight.durationInHours} hours</span>
+		                        </div>
+		                        <div class="flight-details">
+		                            <span class="flight-destination">${flight.destination}</span>
+		                            <img src="/images/landing.jpg" alt="Take-off Icon" class="icon"> <!-- Take-off icon -->
+		                            <span>${flight.arrivalTime}</span> <!-- Arrival time -->
+		                        </div>
+		                    </div>
+		                `;
+		                flightContainer.innerHTML += flightRTHtml;
+		           });
+		           
+	           }
+	          
+	      }
+
+			    // Function to handle flight selection
+			    function selectFlight(flightId, type) {
+					
+					const flight = document.getElementById(flightId);
+
+					flight.classList.toggle('selected');
+					
+					submitFlights(flightId, type);
+					
+			        // Perform actions when a flight is selected, such as redirecting to another page
+			    }
+			    
+			    var selectedoneway;
+				var selectedReturn;
+			    
+			    function submitFlights(flightId, type) {
+					
+					
+					
+					if(type==="oneway") {
+						selectedoneway = flightId;
+					}
+					else {
+						selectedReturn = flightId;
+					}
+					if(tripType==="roundtrip") {
+						if(selectedoneway != null && selectedReturn != null) {
+							sessionStorage.setItem('oneway', selectedoneway);
+							sessionStorage.setItem('return', selectedReturn);
+
+							window.location.href = '/templates/PassengerDetails.html';
+						}
+					}
+					if(tripType==="oneway") {
+						if(selectedoneway != null) {
+							sessionStorage.setItem('oneway', selectedoneway);
+							window.location.href = '/templates/PassengerDetails.html';
+						}
+					}
+					
+					
+
+					
+				}
+			    
+		
+	</script>
+</body>
+</html>

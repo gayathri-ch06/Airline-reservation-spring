@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/images/BG.jpg');
+            background-size: cover;
+        }
+        .backgound {
+			background-image: url('/images/BG.jpg');
+
+		}
+        .container {
+            width: 605px;
+            height: 308px;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+		    border-radius: 5px;
+		    border-color: white;
+		    margin : 20px auto;
+        }
+        h1 {
+            font-size: 35px;
+            margin-bottom: 20px;
+            color: white;
+
+        }
+        .baggage-options {
+            display: flex;
+            flex-direction: column;
+
+        }
+        .baggage-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .baggage-option input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .bag-description {
+            margin-left: 10px;
+            font-size: 14px;
+        }
+        .counter {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        .counter button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+ 			background-image: linear-gradient(to bottom right, #6F675B, #E9AB47);            color: #fff;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .counter button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        button:hover {
+ 			background-image: linear-gradient(to bottom right, #6F675B, #E9AB47);            color: #fff;
+        }
+        .submit-btn {
+            width: 50%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+ 			background-image: linear-gradient(to bottom right, #6F675B, #E9AB47);            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px; /* Add space between button and other content */
+
+        }
+        .submit-btn:hover {
+ 			background-image: linear-gradient(to bottom right, #E9AB47, #6F675B);            color: #fff;
+        }
+        .navbar {
+			background-image: url('/images/navbar-BG.jpg');
+			background-size:cover;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .profile-icon {
+            position: relative;
+        }
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: none;
+        }
+        .profile-dropdown a {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+        .profile-dropdown a:last-child {
+            margin-bottom: 0;
+        }
+        .profile-icon:hover .profile-dropdown {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+	
+	<div class="navbar">
+        <div class="navbar-logo">Cloud9 Airlines</div>
+        <div class="navbar-links">
+            <a href="/templates/FlightSearch.html">Flight Search</a>
+            <a href="/templates/MyBookings.html">My Bookings</a>
+            <div class="profile-icon">
+                <img src="/images/profile-icon.jpg" alt="Profile Icon" width="30" height="30">
+                <div class="profile-dropdown">
+                    <a href="/templates/Profile.html">Edit Profile</a>
+                    <a href="/templates/index.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	   <div class="container">
+	    <h1>Baggage Selection</h1>
+	    <div class="baggage-options">
+	        <div class="baggage-option">
+	            <label>Personal Item Bag (No Charge) - Every passenger gets one</label>
+	            <span class="bag-description">(14"H X 18"W X 8"D)</span>
+	        </div>
+	        <div class="baggage-option">
+	            <input type="checkbox" id="carryOn" name="baggage" value="carryOn">
+	            <label for="carryOn">Carry-On Bag ($20)</label>
+	            <span class="bag-description">(24"H X 16"W X 10"D)</span>
+	        </div>
+	        <div class="baggage-option">
+	            <input type="checkbox" id="checkedBag" name="baggage" value="checkedBag">
+	            <label for="checkedBag">Checked Bag ($30)</label>
+	            <span class="bag-description">(&lt;40 lbs)</span>
+	            <div class="counter">
+	                <button id="decrement">-</button>
+	                <input type="number" id="checkedBagCount" name="checkedBagCount" min="1" max="6" value="1" readonly>
+	                <button id="increment">+</button>
+	            </div>
+	        </div>
+	    </div>
+	    <button class="submit-btn" type="submit" onclick="submitBaggageSelection()">Continue</button>
+	</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const decrementButton = document.getElementById("decrement");
+            const incrementButton = document.getElementById("increment");
+            const countInput = document.getElementById("largeBagCount");
+
+            decrementButton.addEventListener("click", function() {
+                let count = parseInt(countInput.value);
+                if (count > 1) {
+                    count--;
+                    countInput.value = count;
+                    incrementButton.disabled = false;
+                }
+            });
+
+            incrementButton.addEventListener("click", function() {
+                let count = parseInt(countInput.value);
+                if (count < 6) {
+                    count++;
+                    countInput.value = count;
+                    if (count === 6) {
+                        incrementButton.disabled = true;
+                    }
+                }
+            });
+        });
+        
+        function submitBaggageSelection() {
+        // Get selected baggage options
+	        const carryOnChecked = document.getElementById('carryOn').checked;
+	        const checkedBagChecked = document.getElementById('checkedBag').checked;
+	        const checkedBagCount = checkedBagChecked ? document.getElementById('checkedBagCount').value : 0;
+	
+	        // Perform any necessary processing or validation
+	        // For example, you can send the selected options to the server for further processing
+	
+	        // Placeholder action: Log the selected options to the console
+	        sessionStorage.setItem('carryOnChecked', carryOnChecked);
+	        sessionStorage.setItem('chekedBagCount', checkedBagCount);	
+	        // Redirect or perform other actions as needed
+	        // window.location.href = '/next-page';
+	        
+	        window.location.href = '/templates/SeatSelectionhtml.html'; // Redirect to signin.html
+
+	    }
+        
+        
+    </script>
+    
+</body>
+</html>

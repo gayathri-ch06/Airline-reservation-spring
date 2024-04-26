@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Search</title>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/images/BG.jpg');
+            background-size: cover;
+        }
+        .backgound {
+			background-image: url('/images/BG.jpg');
+
+		}
+        .navbar {
+			background-image: url('/images/navbar-BG.jpg');
+			background-size:cover;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .profile-icon {
+            position: relative;
+        }
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: none;
+        }
+        .profile-dropdown a {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+        .profile-dropdown a:last-child {
+            margin-bottom: 0;
+        }
+        .profile-icon:hover .profile-dropdown {
+            display: block;
+        }
+        .container {
+            width: 600px;
+            border: 4px solid #000; /* Border size and color */
+            border-radius: 4px;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #fff; /* Background color for the container */
+            margin: 20px auto; /* Center the container */
+        }
+        .heading {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+        .input-group select{
+            margin-bottom: 20px;
+            margin-top: 20px;
+            width: 120px;
+            padding: 10px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .input-group input[type="text"],
+        .input-group input[type="date"] {
+            width: calc(50% - 5px);
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .counter label {
+			display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+		}
+        
+        .counter-control button {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #000;
+            cursor: pointer;
+        }
+        .counter-control button:hover {
+            background-color: #f0f0f0;
+        }
+        .counter-control input[type="number"] {
+            width: 60px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #775279;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #795A90;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-logo">Cloud9 Airlines</div>
+        <div class="navbar-links">
+            <a href="/templates/FlightSearch.html">Flight Search</a>
+            <a href="/templates/MyBookings.html">My Bookings</a>
+            <div class="profile-icon">
+                <img src="/images/profile-icon.jpg" alt="Profile Icon" width="30" height="30">
+                <div class="profile-dropdown">
+                    <a href="/templates/Profile.html">Edit Profile</a>
+                    <a href="/templates/index.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="heading">Flight Search</h1>
+        <div class="input-group">
+            <label for="from">From</label>
+   		    <select id="from"></select>
+        </div>
+        <div class="input-group">
+            <label for="to">To</label>
+   		    <select id="to"></select>
+        </div>
+        <div class="input-group">
+            <label for="departure">Departure Date</label>
+            <input type="date" id="departure" onchange="changeReturnDate()">
+        </div>
+        <div class="input-group">
+            <label for="return">Return Date</label>
+            <input type="date" id="return" onchange="changeDepartureDate()">
+        </div>
+        <div class="counter">
+                <label for="adults">Adults (18+)</label>
+                <div class="counter-control">
+                    <input type="number" id="adults" value="1" min="1">
+                </div>
+         </div>
+         <div class="counter">
+                <label for="children">Children (Under 15)</label>
+                <div class="counter-control">
+                    <input type="number" id="children" value="0" min="0">
+                </div>
+          </div>
+          <div class="counter">
+                <label for="infants">Infants (Under 2)</label>
+                <div class="counter-control">
+                    <input type="number" id="infants" value="0" min="0">
+                </div>
+          </div>
+       <div class="input-group">
+            <label for="trip">Trip Type</label>
+            <select id="trip" onchange="toggleReturnDate()">
+                <option value="roundtrip">Roundtrip</option>
+                <option value="oneway">One-way</option>
+            </select>
+        </div>
+        
+        <button type="button" class="submit-btn" onclick="searchFlights()">Search Flights</button>
+    </div>
+
+    <script>
+		
+         var today = new Date().toISOString().slice(0, 10);
+
+		// Set the departure date input's minimum date to today
+		document.getElementById('departure').min = today;
+		document.getElementById('return').min = today;
+		
+		function changeReturnDate() {
+			document.getElementById('return').min = document.getElementById('departure').value;
+		}
+		
+		function changeDepartureDate() {
+			document.getElementById('departure').max = document.getElementById('return').value;
+		}
+		
+        function toggleReturnDate() {
+            var tripType = document.getElementById('trip').value;
+            var returnDateInput = document.getElementById('return');
+            
+            if (tripType === 'oneway') {
+                returnDateInput.disabled = true;
+                returnDateInput.value = ''; // Reset return date value
+            } else {
+                returnDateInput.disabled = false;
+            }
+        }
+
+    	function searchFlights() {
+	        var from = document.getElementById('from').value;
+	        var to = document.getElementById('to').value;
+	        var departure = document.getElementById('departure').value;
+	        var returnDate = document.getElementById('return').value;
+	        var tripType = document.getElementById('trip').value;
+	        var adults = document.getElementById('adults').value;
+	        var children = document.getElementById('children').value;
+	        var infants = document.getElementById('infants').value;
+	        
+	 
+	        
+	        // Prepare the request body
+	        var requestBody = {
+	            from: from,
+	            to: to,
+	            departureDate: departure,
+	            returnDate: returnDate,
+	            tripType: tripType,
+	            adults: adults,
+	            children: children,
+	            infants: infants
+	        };
+	        
+	        // Send the flight search details to the Spring API
+	        fetch('/searchFlights', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        },
+		        body: JSON.stringify(requestBody)
+			    })
+			    .then(response => response.json())
+			    .then(data => {
+			        console.log(data); // Log the response from the API
+        			sessionStorage.setItem('flights', JSON.stringify(data));
+        			var passCount = parseInt(adults) + parseInt(children) + parseInt(infants);
+        			console.log(passCount);
+        			sessionStorage.setItem('passengersCount', passCount)
+        			if(tripType==="roundtrip") {
+						sessionStorage.setItem('tripType', tripType);
+						console.log("Trip type is roundtrip");
+						searchFlightsRT();
+					}else {
+			        	window.location.href = '/templates/FlightSearchList.html?';
+			        }
+			    })
+			    .catch(error => console.error('Error searching flights:', error));
+			}
+			
+			function searchFlightsRT() {
+				var from = document.getElementById('to').value;
+		        var to = document.getElementById('from').value;
+		        var departure = document.getElementById('return').value;
+		        var returnDate = document.getElementById('return').value;
+		        var tripType = document.getElementById('trip').value;
+		        var adults = document.getElementById('adults').value;
+		        var children = document.getElementById('children').value;
+		        var infants = document.getElementById('infants').value;
+		        
+		        console.log("In Getting Roundtrip Flights");
+		        
+		        // Prepare the request body
+		        var requestBody = {
+		            from: from,
+		            to: to,
+		            departureDate: departure,
+		            returnDate: returnDate,
+		            tripType: tripType,
+		            adults: adults,
+		            children: children,
+		            infants: infants
+		        };
+		        
+		        // Send the flight search details to the Spring API
+		        fetch('/searchFlights', {
+			        method: 'POST',
+			        headers: {
+			            'Content-Type': 'application/json'
+			        },
+			        body: JSON.stringify(requestBody)
+				    })
+				    .then(response => response.json())
+				    .then(data => {
+				        console.log(data); // Log the response from the API
+	        			sessionStorage.setItem('flightsRT', JSON.stringify(data));
+				        window.location.href = '/templates/FlightSearchList.html?';
+				    })
+				    .catch(error => console.error('Error searching flights:', error));
+			}
+			
+			
+		
+	    
+	    
+	    // Function to fetch airport codes and populate dropdowns
+		function populateAirportDropdowns() {
+		    fetch('/getAirportCodes')
+		    .then(response => response.json())
+		    .then(airportCodes => {
+		        // Get references to the "From" and "To" dropdowns
+		        var fromDropdown = document.getElementById('from');
+		        var toDropdown = document.getElementById('to');
+		        
+		        // Clear existing options
+		        fromDropdown.innerHTML = '';
+		        toDropdown.innerHTML = '';
+		        
+		        // Create and append option elements for each airport code
+		        airportCodes.forEach(code => {
+		            var option = document.createElement('option');
+		            option.text = code;
+		            fromDropdown.add(option.cloneNode(true));
+		            toDropdown.add(option);
+		        });
+		    })
+		    .catch(error => console.error('Error fetching airport codes:', error));
+		}
+		
+		// Call the function to populate the dropdowns when the page loads
+		window.onload = populateAirportDropdowns;
+
+    </script>
+</body>
+</html>

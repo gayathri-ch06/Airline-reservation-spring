@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+   <style>
+       body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('/images/BG.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .backgound {
+			background-image: url('/images/BG.jpg');
+
+		}
+        .container {
+            width: 605px;
+            height: 608px;
+            border-radius: 4px;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: rgba(240, 240, 240, 0.8); /* Adjust background color opacity */
+        }
+        .heading {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #605DEC;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #4b47b6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="heading">Update Profile</h1>
+        <div class="input-group">
+            <input type="text" id="firstname" class="input-field" placeholder="First Name">
+        </div>
+        <div class="input-group">
+            <input type="text" id="lastname" class="input-field" placeholder="Last Name">
+        </div>
+        <div class="input-group">
+            <input type="text" id="email" class="input-field" placeholder="Email" disabled>
+            <span id="emailValidator" class="validator-label"></span>
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" class="input-field" placeholder="Password">
+            <span id="passwordValidator" class="validator-label"></span>
+        </div>
+        <div class="input-group">
+            <input type="number" id="mobilenumber" class="input-field" placeholder="Mobile Number">
+        </div>
+        <div class="input-group">
+            <input type="text" id="addressLine" class="input-field" placeholder="Street Address">
+        </div>
+         <div class="input-group">
+            <input type="text" id="city" class="input-field" placeholder="City">
+        </div>
+         <div class="input-group">
+            <input type="text" id="state" class="input-field" placeholder="State">
+        </div>
+         <div class="input-group">
+            <input type="number" id="zipcode" class="input-field" placeholder="Zipcode">
+        </div>
+        <button type="button" class="submit-btn" onclick="updateProfile()">Update</button>
+    </div>
+
+    <script>
+        // Function to fetch user profile details and populate the form
+        function populateProfile() {
+			const user = JSON.parse(sessionStorage.getItem('loggedInUser'));
+			fetch('/getProfile', {
+		    method: 'GET',
+		    headers: {
+		        'Content-Type': 'application/json'
+		    },
+		    body: JSON.stringify({
+		        firstName: '',
+		        lastName: '',
+		        userEmail: user.userEmail,
+		        password: '',
+		        mobileNumber: 0,
+		        addressLine: '',
+		        city: '',
+		        state: '',
+		        zipcode: 0
+		    })
+		})
+		.then(response => response.json())
+        .then(profile => {
+		    if (response.ok) {
+		        console.log('User updated successfully');
+		        // Handle success
+		    } else {
+		        console.error('Failed to register user');
+		        // Handle failure
+		    }
+		})
+		.catch(error => {
+		    console.error('Error:', error);
+		});
+        }
+			
+
+        // Function to update user profile
+        function updateProfile() {
+			
+			var firstName = document.getElementById('firstname').value;
+	        var lastName = document.getElementById('lastname').value;
+	        var email = document.getElementById('email').value;
+	        var password = document.getElementById('password').value;
+	        var mobileNumber = document.getElementById('mobilenumber').value;
+	        var addressLine = document.getElementById('addressLine').value;
+	        var city = document.getElementById('city').value;
+	        var state = document.getElementById('state').value;
+	        var zipcode = document.getElementById('zipcode').value;
+            fetch('/updateUser', {
+		    method: 'POST',
+		    headers: {
+		        'Content-Type': 'application/json'
+		    },
+		    body: JSON.stringify({
+		        firstName: firstName,
+		        lastName: lastName,
+		        userEmail: email,
+		        password: password,
+		        mobileNumber: mobileNumber,
+		        addressLine: addressLine,
+		        city: city,
+		        state: state,
+		        zipcode: zipcode
+		    })
+		})
+		.then(response => {
+		    if (response.ok) {
+		        console.log('User updated successfully');
+		        // Handle success
+		    } else {
+		        console.error('Failed to register user');
+		        // Handle failure
+		    }
+		})
+		.catch(error => {
+		    console.error('Error:', error);
+		});
+		            window.location.href = '/templates/FlightSearch.html'; // Redirect to FlightSearch.html
+
+        }
+
+        // Populate the form with user profile details when the page loads
+        document.addEventListener('DOMContentLoaded', populateProfile);
+    </script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmation Page</title>
+  <style>
+    body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+            align-items: center;
+            background-image: url('/images/BG.jpg');
+            background-size: cover;
+    }
+    
+    .container {
+      width: 80%;
+      max-width: 600px;
+      background-color: #fff;
+      padding: 20px;
+      margin: 20px auto;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+	  border-color: white;
+      
+    }
+
+    .container h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .order-summary,
+    .payment-details,
+    .card-details {
+      margin-bottom: 20px;
+    }
+
+    .order-summary h2,
+    .payment-details h2,
+    .card-details h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .card-details form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-details form label {
+      margin-bottom: 5px;
+    }
+
+    .card-details form input[type="text"] {
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .card-details form button[type="submit"] {
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .card-details form button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+    
+    #savedCardDetails {
+    display: none;
+    margin-top: 10px; /* Adjust as needed */
+	}
+	
+	#savedCardDetails label {
+	    font-weight: bold; /* Make the label bold */
+	}
+	
+	#savedCardDetails select {
+	    width: 100%; /* Make the select element take up the full width */
+	    padding: 8px; /* Add padding for better spacing */
+	    margin-top: 5px; /* Add some space between the label and the select element */
+	    border: 1px solid #ccc; /* Add a border */
+	    border-radius: 4px; /* Add border radius for rounded corners */
+	    box-sizing: border-box; /* Ensure padding and border are included in the width */
+	}
+	.navbar {
+			background-image: url('/images/navbar-BG.jpg');
+			background-size:cover;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .profile-icon {
+            position: relative;
+        }
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: none;
+        }
+        .profile-dropdown a {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+        .profile-dropdown a:last-child {
+            margin-bottom: 0;
+        }
+        .profile-icon:hover .profile-dropdown {
+            display: block;
+        }
+
+  </style>
+</head>
+<body>
+	
+	<div class="navbar">
+        <div class="navbar-logo">Cloud9 Airlines</div>
+        <div class="navbar-links">
+            <a href="/templates/FlightSearch.html">Flight Search</a>
+            <a href="/templates/MyBookings.html">My Bookings</a>
+            <div class="profile-icon">
+                <img src="/images/profile-icon.jpg" alt="Profile Icon" width="30" height="30">
+                <div class="profile-dropdown">
+                    <a href="/templates/Profile.html">Edit Profile</a>
+                    <a href="/templates/index.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  <div class="container">
+    <h1>Order Confirmation</h1>
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+      <p>Here is the summary of your order:</p>
+      <!-- Insert order summary details here -->
+    </div>
+    <div class="payment-details">
+      <h2>Payment Details</h2>
+      <table>
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+        <tr>
+			<td>Passenger</td>
+			<td>1</td>
+			<td>$30</td>
+		</tr>
+		<tr>
+			<td>Carry-On</td>
+			<td>1</td>
+			<td>$20</td>
+		</tr>
+		<tr>
+			<td>Checked-Bags</td>
+			<td>1</td>
+			<td>$30</td>
+		</tr>
+      </table>
+    </div>
+   
+    <div class="card-details">
+	  <h2>Card Details</h2>
+	  <form id="paymentForm" onsubmit="checkout(event)">
+	    <!-- Radio buttons to select existing saved cards or add a new card -->
+	    <input type="radio" id="saved_card" name="payment_option" value="saved_card">
+	    <label for="saved_card">Use Saved Card</label><br>
+	    <input type="radio" id="new_card" name="payment_option" value="new_card">
+	    <label for="new_card">Add New Card</label><br><br>
+	
+	    <!-- Hidden fields for saved card details -->
+	    <div id="savedCardDetails" style="display: none;">
+	      <label for="saved_card">Select Saved Card:</label><br>
+	      <select id="saved_card_select" name="saved_card">
+	      </select><br><br>
+	    </div>
+	
+	    <!-- Fields for adding a new card -->
+	    <div id="newCardDetails" style="display: none;">
+	      <label for="card_number">Card Number:</label><br>
+	      <input type="text" id="card_number" name="card_number"><br><br>
+	      <label for="expiry_date">Expiry Date:</label><br>
+	      <input type="text" id="expiry_date" name="expiry_date"><br><br>
+	      <label for="cvv">CVV:</label><br>
+	      <input type="text" id="cvv" name="cvv"><br><br>
+	      <label for="cardholder_name">Cardholder Name:</label><br>
+	      <input type="text" id="cardholder_name" name="cardholder_name"><br><br>
+	    </div>
+	
+	    <button type="submit">Checkout</button>
+	  </form>
+	</div>
+
+  <script>
+    function checkout(event) {
+      // Prevent the default form submission behavior
+      event.preventDefault();
+      
+      var user = sessionStorage.getItem('userEmail');
+
+      var tripType = sessionStorage.getItem('tripType');
+      var oneway = sessionStorage.getItem('oneway');
+      var returnFlight = '';
+      if(tripType==="roundtrip") {
+		  returnFlight = sessionStorage.getItem('return');
+	  }
+      
+      const passengersList = JSON.parse(sessionStorage.getItem('passengers'));
+      var carryonchecked = sessionStorage.getItem('carryOnChecked');
+      var numberOfCheckedBags = sessionStorage.getItem('chekedBagCount');
+      
+      var numberOfPassengers = passengersList.length;
+      var numberOfCarryon;
+      var total = 30
+      
+      if(carryonchecked) {
+		  numberOfCarryon = numberOfPassengers;
+	  }
+	  
+	  var selectedSeats = sessionStorage.getItem('selectedSeats');
+	  
+	 console.log(passengersList);
+	  
+	  fetch('/addBooking', {
+		    method: 'POST',
+		    headers: {
+		        'Content-Type': 'application/json'
+		    },
+		    body: JSON.stringify({
+		        bookingId: '',
+		        paymentId: 'db0005a5d20dfc68ffb77657bbea479a242a3c49bb27da96505fa4649d809b2c992e4566d1fb149372d99fdce78c48c0',
+		        departureFlight: oneway,
+		        returnFlight: returnFlight,
+		        userEmail: user,
+		        totalFare: total,
+		        bookingDate: new Date().toISOString().slice(0, 10),
+		        tripType: tripType,
+		        numberOfPassengers: numberOfPassengers,
+		        numberOfCarryon: numberOfCarryon,
+		        numberOfCheckedBags: numberOfCheckedBags
+		    })
+		})
+		.then(response => response.json())
+		 .then(data => {
+			 		console.log(data);
+			        sessionStorage.setItem('booking', JSON.stringify(data));
+			        console.log(JSON.parse(sessionStorage.getItem('booking')).bookingId);
+			    })
+			    .catch(error => console.error('Error searching flights:', error));
+		
+		
+		var i = 0;
+		passengersList.forEach((passenger) => {
+		fetch('/addTicket', {
+		    method: 'POST',
+		    headers: {
+		        'Content-Type': 'application/json'
+		    },
+		    body: JSON.stringify({
+		        bookingId: JSON.parse(sessionStorage.getItem('booking')).bookingId,
+		        firstName: passenger.firstName,
+		        lastName: passenger.lastName,
+		        gender: passenger.gender,
+		        dateOfBirth: passenger.dateOfBirth,
+		        passengerType: 'Adult',
+		        seatAssigned: selectedSeats[i],
+		        flightType: 'oneway'
+		    })
+		})
+		.then(response => {
+			if (response.ok) {
+			        console.log('Ticket added successfully');
+			        i = i+1;
+			        // Handle success
+			    } else {
+			        console.error('Failed to register user');
+			        // Handle failure
+			    }
+		})
+		.catch(error => {
+		    console.error('Error:', error);
+		});
+		 
+		});
+			   
+	  	i = 0;
+		passengersList.forEach((passenger) => {
+		fetch('/addTicket', {
+		    method: 'POST',
+		    headers: {
+		        'Content-Type': 'application/json'
+		    },
+		    body: JSON.stringify({
+		        bookingId: JSON.parse(sessionStorage.getItem('booking')).bookingId,
+		        firstName: passenger.firstName,
+		        lastName: passenger.lastName,
+		        gender: passenger.gender,
+		        dateOfBirth: passenger.dateOfBirth,
+		        passengerType: 'Adult',
+		        seatAssigned: selectedSeats[i],
+		        flightType: 'return'
+		    })
+		})
+		.then(response => {
+			if (response.ok) {
+			        console.log('Ticket added successfully');
+			        i = i+1;
+			        // Handle success
+			    } else {
+			        console.error('Failed to register user');
+			        // Handle failure
+			    }
+		})
+		.catch(error => {
+		    console.error('Error:', error);
+		});
+		 
+		});
+		
+
+		
+	  
+
+      // Disable the button to prevent multiple submissions
+      const submitButton = event.target.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+
+      // Display loading text on the button
+      submitButton.innerHTML = "Processing...";
+
+      // Set timeout to simulate loading for 5 seconds
+      setTimeout(() => {
+        // Redirect to another page after 5 seconds
+       	window.location.href = "/templates/BookingConfirmation.html";
+      }, 5000);
+      }
+      
+      
+      
+    
+    
+    function toggleCardOptions() {
+    const savedCardDetails = document.getElementById("savedCardDetails");
+    const newCardDetails = document.getElementById("newCardDetails");
+    const savedCardOption = document.getElementById("saved_card");
+    const newCardOption = document.getElementById("new_card");
+    var user = sessionStorage.getItem('userEmail');
+    console.log(user);
+
+
+    savedCardOption.addEventListener("change", () => {
+      if (savedCardOption.checked) {
+        savedCardDetails.style.display = "block";
+        newCardDetails.style.display = "none";
+        fetch('/getPayment', {
+		    method: 'POST',
+		    headers: {
+		        'Content-Type': 'text/plain'
+		    },
+		    body:  user
+		      
+		    
+		})
+		.then(response => response.json())
+        .then(cards => {
+		    const savedCardSelect = document.getElementById('saved_card_select');
+                savedCardSelect.innerHTML = ``; // Clear existing options
+                cards.forEach((card, index) => {
+                    const option = document.createElement('option');
+                    option.textContent = "Card Ending with 5124"; // Assuming cardNumber is unique
+                    option.value = "5124512451245124"; // Display cardNumber as option text
+                    savedCardSelect.appendChild(option);
+                    });
+		})
+		.catch(error => {
+		    console.error('Error:', error);
+		});
+      }
+    });
+
+    newCardOption.addEventListener("change", () => {
+      if (newCardOption.checked) {
+        savedCardDetails.style.display = "none";
+        newCardDetails.style.display = "block";
+      }
+    });
+  }
+  toggleCardOptions();
+  </script>
+</body>
+</html>

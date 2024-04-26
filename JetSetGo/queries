@@ -1,0 +1,85 @@
+CREATE TABLE Airport (
+	airportID VARCHAR(50) PRIMARY KEY,
+	airportName VARCHAR(255),
+	city VARCHAR(100),
+	state VARCHAR(100),
+	country VARCHAR(100),
+	zipcode VARCHAR(20),
+	timeZone VARCHAR(50)
+);
+								
+								
+CREATE TABLE Users (
+    userEmail VARCHAR(255) PRIMARY KEY,
+    firstName VARCHAR(100),
+    lastName VARCHAR(100),
+    mobileNumber VARCHAR(20),
+    addressLine1 VARCHAR(255),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    zipcode VARCHAR(20)
+);
+
+CREATE TABLE PaymentInfo (
+    cardNumber VARCHAR(20) PRIMARY KEY,
+    userEmail VARCHAR(255),
+    expiryDate VARCHAR(10),
+    nameOnCard VARCHAR(255),
+    securityCode INT,
+    street VARCHAR(255),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    zipcode VARCHAR(20),
+    FOREIGN KEY (userEmail) REFERENCES Users(userEmail)
+);
+
+CREATE TABLE Flight (
+    flightId VARCHAR(50) PRIMARY KEY,
+    source VARCHAR(50),
+    destination VARCHAR(50),
+    departureDate DATE,
+    arrivalDate DATE,
+    departureTime TIME,
+    arrivalTime TIME,
+    FOREIGN KEY (source) REFERENCES Airport(airportID),
+    FOREIGN KEY (destination) REFERENCES Airport(airportID)
+);
+
+CREATE TABLE FlightSeatsOccupancy (
+    flightID VARCHAR(50),
+    seatNumber VARCHAR(10),
+    occupancy BOOLEAN,
+    PRIMARY KEY (flightID, seatNumber),
+    FOREIGN KEY (flightID) REFERENCES Flight(flightId)
+);
+
+CREATE TABLE Booking (
+    bookingID INT PRIMARY KEY,
+    paymentID VARCHAR(20),
+    departureFlight VARCHAR(50),
+    returnFlight VARCHAR(50),
+    userEmail VARCHAR(255),
+    totalFare DOUBLE,
+    bookingDate DATE,
+    tripType VARCHAR(20),
+    numberOfPassengers INT,
+    numberOfCarryOns INT,
+    numberOfCheckedBags INT,
+    FOREIGN KEY (paymentID) REFERENCES PaymentInfo(cardNumber),
+    FOREIGN KEY (departureFlight) REFERENCES Flight(flightId),
+    FOREIGN KEY (returnFlight) REFERENCES Flight(flightId),
+    FOREIGN KEY (userEmail) REFERENCES Users(userEmail)
+);
+
+CREATE TABLE Tickets (
+    ticketID VARCHAR(50) PRIMARY KEY,
+    bookingID INT,
+    firstName VARCHAR(100),
+    lastName VARCHAR(100),
+    gender VARCHAR(20),
+    dateOfBirth DATE,
+    passengerType VARCHAR(20),
+    seatNumber VARCHAR(10),
+    flightType VARCHAR(20),
+    FOREIGN KEY (bookingID) REFERENCES Booking(bookingID)
+);

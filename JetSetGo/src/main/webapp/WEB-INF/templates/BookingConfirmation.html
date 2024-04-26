@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Confirmation</title>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+            align-items: center;
+            background-image: url('/images/BG.jpg');
+            background-size: cover;
+        }
+        .backgound {
+			background-image: url('/images/BG.jpg');
+
+		}
+        .container {
+            width: 605px;
+            height: 250px;
+            border-radius: 4px;
+            justify-content: center;
+            align-items: center;
+            margin :20px auto;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: rgba(240, 240, 240, 0.8); /* Adjust background color opacity */
+        }
+        .heading {
+            font-size: 35px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-image: linear-gradient(to bottom right, #6F675B, #E9AB47); 
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-image: linear-gradient(to bottom right, #E9AB47, #6F675B); 
+        }
+        .navbar {
+			background-image: url('/images/navbar-BG.jpg');
+			background-size:cover;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .profile-icon {
+            position: relative;
+        }
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: none;
+        }
+        .profile-dropdown a {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+        .profile-dropdown a:last-child {
+            margin-bottom: 0;
+        }
+        .profile-icon:hover .profile-dropdown {
+            display: block;
+        }
+    </style>
+  </style>
+</head>
+<body>
+  <div class="navbar">
+        <div class="navbar-logo">Cloud9 Airlines</div>
+        <div class="navbar-links">
+            <a href="/templates/FlightSearch.html">Flight Search</a>
+            <a href="/templates/MyBookings.html">My Bookings</a>
+            <div class="profile-icon">
+                <img src="/images/profile-icon.jpg" alt="Profile Icon" width="30" height="30">
+                <div class="profile-dropdown">
+                    <a href="/templates/Profile.html">Edit Profile</a>
+                    <a href="/templates/index.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>	
+  <div class="container">
+    <h1>Booking Confirmation</h1>
+    <div class="booking-details">
+      <p>Your booking has been confirmed. </p>
+    </div>
+    <div class="thank-you-message">
+      <p>Thank you for booking with us. We look forward to serving you.</p>
+    </div>
+    <button class="submit-btn" onclick="searchAnotherFlight()">Search Another Flight</button>
+  </div>
+
+  <script>
+    function searchAnotherFlight() {
+      // Redirect to the search page
+      window.location.href = "/templates/FlightSearch.html";
+    }
+  </script>
+</body>
+</html>
